@@ -17,6 +17,7 @@ export const Institutions : Record<InstitutionId, Institution> = {
 export const InstitutionsHasWorker : Array<[InstitutionId, UserId]> = [
     ["1", "1"],
     ["1", "2"],
+    ["1", "3"],
     ["2", "3"],
     ["2", "4"],
 ];

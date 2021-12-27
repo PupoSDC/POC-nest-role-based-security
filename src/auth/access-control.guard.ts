@@ -11,8 +11,11 @@ type UserRoleWithTarget = [AppRole, targetId];
 
 @Injectable()
 export class AccessControlGuard implements CanActivate {
+  private institutionsHasAdmin = InstitutionsHasAdmin;
+  private institutionsHasWorker = InstitutionsHasWorker;
+
   constructor(
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector,´
     @InjectRolesBuilder() private readonly roleBuilder: RolesBuilder,
   ) { }
 
@@ -25,10 +28,13 @@ export class AccessControlGuard implements CanActivate {
     const user = await this.getUser(context);
     if (!user) throw new UnauthorizedException();
     let roles: UserRoleWithTarget[] = [];
-    InstitutionsHasAdmin
+
+    // This represents a database access. It is eagerly done, which is  rather dumb, since
+    // most likely we only need 1 or 2 roles per request.
+    this.institutionsHasAdmin
       .filter(([_, id]) => id === user.id)
       .forEach(([institutionId]) => roles.push([AppRole.INSTITUTION_ADMIN, institutionId]));
-    InstitutionsHasWorker
+    this.institutionsHasWorker
       .filter(([_, id]) => id === user.id)
       .forEach(([institutionId]) => roles.push([AppRole.INSTITUTION_WORKER, institutionId]));
 
@@ -51,10 +57,6 @@ export class AccessControlGuard implements CanActivate {
     if (!resourceRoles.length) {
       return false;
     }
-
-    console.log({
-      role, params, userRoles, resourceRoles,
-    });
 
     const permission = this.roleBuilder.permission({
       action: role.action,

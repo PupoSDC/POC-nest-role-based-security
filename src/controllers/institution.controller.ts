@@ -17,7 +17,6 @@ export class InstitutionController {
         private readonly workerRepository: WorkerService
     ) { }
 
-
     @AccessControl({
         resource: AppResource.INSTITUTION,
         action: 'read',
