@@ -59,9 +59,8 @@ roles
     .grant(AppRole.INSTITUTION_WORKER)
         .readOwn(AppResource.INSTITUTION);
 ```
-These are sets of business roles that are fairly readable in english.
-
-Then, on a resource, we annotate what does the resource do:
+These are sets of business roles that are fairly readable in english. Then, 
+on a resource, we annotate what does the endpoint do:
 
 ```ts
     @AccessControl({
