@@ -1,18 +1,39 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { AccessControlModule } from 'nest-access-control';
+import { roles } from './app.roles';
 import { AppController } from './controllers/app.controller';
 import { InstitutionController } from './controllers/institution.controller';
-import { InstitutionRepository } from './repositories/institution.repository';
-import { WorkerRepository } from './repositories/worker.repository';
+import { UserService } from "./services/user.service";
+import { InstitutionService } from './services/institution.service';
+import { WorkerService } from './services/worker.service';
+import { LocalStrategy } from './auth/local.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { AuthService } from './services/auth.service';
+import { AuthController } from './controllers/auth.controller';
+import { JwtStrategy, JWT_SECRET } from './auth/jwt.strategy';
 
 @Module({
-  imports: [],
+  imports: [
+    PassportModule,
+    AccessControlModule.forRoles(roles),
+    JwtModule.register({
+      secret: JWT_SECRET,
+      signOptions: { expiresIn: '500s' },
+    }),
+  ],
   controllers: [
-    AppController, 
+    AppController,
+    AuthController,
     InstitutionController
   ],
   providers: [
-    InstitutionRepository,
-    WorkerRepository
+    JwtStrategy,
+    LocalStrategy,
+    AuthService,
+    UserService,
+    InstitutionService,
+    WorkerService
   ],
 })
-export class AppModule {}
+export class AppModule { }

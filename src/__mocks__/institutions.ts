@@ -1,5 +1,5 @@
 import { InstitutionId, Institution } from "src/types/Institution";
-import { WorkerId } from "src/types/worker";
+import { UserId } from "src/types/user";
 
 export const Institutions : Record<InstitutionId, Institution> = {
     "1": {
@@ -14,14 +14,14 @@ export const Institutions : Record<InstitutionId, Institution> = {
     },
 };
 
-export const InstitutionsHasWorker : Array<[InstitutionId, WorkerId]> = [
+export const InstitutionsHasWorker : Array<[InstitutionId, UserId]> = [
     ["1", "1"],
     ["1", "2"],
     ["2", "3"],
     ["2", "4"],
 ];
 
-export const InstitutionsHasAdmin : Array<[InstitutionId, WorkerId]> = [
-    ["1", "1"],
-    ["2", "2"],
+export const InstitutionsHasAdmin : Array<[InstitutionId, UserId]> = [
+    ["1", "5"],
+    ["2", "6"],
 ];

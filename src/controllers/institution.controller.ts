@@ -1,21 +1,23 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { InstitutionRepository } from 'src/repositories/institution.repository';
-import { WorkerRepository } from 'src/repositories/worker.repository';
+import { Controller, Get, NotFoundException, Param, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { InstitutionService } from 'src/services/institution.service';
+import { WorkerService } from 'src/services/worker.service';
 import { Institution } from 'src/types/Institution';
-import { Worker, WorkerId } from 'src/types/worker';
+import { User, UserId } from 'src/types/user';
 
+@UseGuards(JwtAuthGuard)
 @Controller("institution")
 export class InstitutionController {
     constructor(
-        private readonly institutionRepository: InstitutionRepository,
-        private readonly workerRepository: WorkerRepository
+        private readonly institutionService: InstitutionService,
+        private readonly workerRepository: WorkerService
     ) { }
 
     @Get(":id")
     getInstitution(
-        @Param('id') id: WorkerId,
+        @Param('id') id: UserId,
     ): Institution {
-        const institution = this.institutionRepository.getInstitution(id);
+        const institution = this.institutionService.getInstitution(id);
         if (!institution) {
             throw new NotFoundException();
         }
@@ -24,8 +26,8 @@ export class InstitutionController {
 
     @Get(":id/workers")
     getInstitutionWorkers(
-        @Param('id') id: WorkerId,
-    ): Worker[] {
+        @Param('id') id: UserId,
+    ): User[] {
         return this.workerRepository.getWorkersByInstitution(id);
     }
 }
