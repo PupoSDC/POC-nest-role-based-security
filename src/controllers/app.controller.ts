@@ -5,6 +5,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return "this is working";
+    return "Hello World!";
   }
 }
