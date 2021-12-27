@@ -1,13 +1,21 @@
 import { RolesBuilder } from "nest-access-control";
 
-export enum AppRoles {
+export enum AppRole {
     INSTITUTION_ADMIN = 'INSTITUTION_ADMIN',
+    INSTITUTION_WORKER = 'INSTITUTION_WORKER',
+}
+
+export enum AppResource {
+    INSTITUTION = "institution",
+    INSTITUTION_WORKERS = "institutionWorkers",
 }
 
 export const roles: RolesBuilder = new RolesBuilder();
 
-
 // prettier-ignore
 roles
-    .grant(AppRoles.INSTITUTION_ADMIN)
-        .readOwn('institution', ['worker']);
+    .grant(AppRole.INSTITUTION_ADMIN)
+        .readOwn(AppResource.INSTITUTION)
+        .readOwn(AppResource.INSTITUTION_WORKERS)
+    .grant(AppRole.INSTITUTION_WORKER)
+        .readOwn(AppResource.INSTITUTION);

@@ -17,10 +17,7 @@ import { JwtStrategy, JWT_SECRET } from './auth/jwt.strategy';
   imports: [
     PassportModule,
     AccessControlModule.forRoles(roles),
-    JwtModule.register({
-      secret: JWT_SECRET,
-      signOptions: { expiresIn: '500s' },
-    }),
+    JwtModule.register({ secret: JWT_SECRET }),
   ],
   controllers: [
     AppController,
