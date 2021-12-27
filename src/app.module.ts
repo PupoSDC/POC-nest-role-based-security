@@ -12,6 +12,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { JwtStrategy, JWT_SECRET } from './auth/jwt.strategy';
+import { WorkerController } from './controllers/worker.controller';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JwtStrategy, JWT_SECRET } from './auth/jwt.strategy';
   controllers: [
     AppController,
     AuthController,
+    WorkerController,
     InstitutionController
   ],
   providers: [

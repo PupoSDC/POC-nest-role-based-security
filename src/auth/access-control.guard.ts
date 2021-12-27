@@ -15,7 +15,7 @@ export class AccessControlGuard implements CanActivate {
   private institutionsHasWorker = InstitutionsHasWorker;
 
   constructor(
-    private readonly reflector: Reflector,´
+    private readonly reflector: Reflector,
     @InjectRolesBuilder() private readonly roleBuilder: RolesBuilder,
   ) { }
 
@@ -33,19 +33,23 @@ export class AccessControlGuard implements CanActivate {
     // most likely we only need 1 or 2 roles per request.
     this.institutionsHasAdmin
       .filter(([_, id]) => id === user.id)
-      .forEach(([institutionId]) => roles.push([AppRole.INSTITUTION_ADMIN, institutionId]));
+      .forEach(([institutionId]) => roles.push(
+        [AppRole.INSTITUTION_ADMIN, institutionId]
+      ));
     this.institutionsHasWorker
       .filter(([_, id]) => id === user.id)
-      .forEach(([institutionId]) => roles.push([AppRole.INSTITUTION_WORKER, institutionId]));
-
+      .forEach(([institutionId]) => roles.push(
+        [AppRole.INSTITUTION_WORKER, institutionId]
+      ));
     return roles;
   }
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const role = this.reflector.get<RoleWithTarget>('access-control', context.getHandler());
     const params = context.switchToHttp().getRequest()?.params ?? {};
+    const body = context.switchToHttp().getRequest()?.body ?? {};
     const userRoles = await this.getUserRoles(context);
-    const target = params[role.target];
+    const target = params[role.paramTarget ?? ""];
     const resourceRoles = userRoles
       .filter(([_, ruleTarget]) => ruleTarget === target)
       .map(([role]) => role);

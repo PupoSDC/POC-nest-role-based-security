@@ -2,7 +2,7 @@ import { SetMetadata } from '@nestjs/common';
 import { Role } from 'nest-access-control';
 
 export interface RoleWithTarget extends Role {
-    target: string,
+    paramTarget?: string,
 };
 
 /**
