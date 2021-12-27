@@ -47,9 +47,8 @@ export class AccessControlGuard implements CanActivate {
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const role = this.reflector.get<RoleWithTarget>('access-control', context.getHandler());
     const params = context.switchToHttp().getRequest()?.params ?? {};
-    const body = context.switchToHttp().getRequest()?.body ?? {};
     const userRoles = await this.getUserRoles(context);
-    const target = params[role.paramTarget ?? ""];
+    const target = params[role?.paramTarget ?? ""];
     const resourceRoles = userRoles
       .filter(([_, ruleTarget]) => ruleTarget === target)
       .map(([role]) => role);

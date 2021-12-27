@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundException, Param, UseGuards } from '@nestjs/common';
+import { Controller, Response,  Get, NotFoundException, Param, Query, Res, UseGuards } from '@nestjs/common';
 import { AppResource } from 'src/app.roles';
 import { AccessControl } from 'src/auth/access-control.decorator';
 import { AccessControlGuard } from 'src/auth/access-control.guard';
@@ -12,6 +12,21 @@ export class WorkerController {
     constructor(
         private readonly workerService: WorkerService
     ) { }
+
+    /** @deprecated  */
+    @Get("/by-institution-id-and-worker")
+    getWorkerByInstitutionIdAndWorker(
+        @Query() params: {
+            workerId: string,
+            institutionId: string,
+        },
+        @Res() response: Response,
+    ): string {
+        const { workerId, institutionId} = params;
+        response.redirected
+        return "";
+    }
+
 
     @AccessControl({
         resource: AppResource.WORKER_PROFILE,
